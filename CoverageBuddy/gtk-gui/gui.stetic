@@ -112,6 +112,8 @@
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="CursorVisible">False</property>
                         <property name="Text" translatable="yes" />
                       </widget>
                     </child>

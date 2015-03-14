@@ -112,6 +112,8 @@ public partial class MainWindow
 		this.fileTextView = new global::Gtk.TextView ();
 		this.fileTextView.CanFocus = true;
 		this.fileTextView.Name = "fileTextView";
+		this.fileTextView.Editable = false;
+		this.fileTextView.CursorVisible = false;
 		this.GtkScrolledWindow.Add (this.fileTextView);
 		this.vbox2.Add (this.GtkScrolledWindow);
 		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
