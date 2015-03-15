@@ -36,13 +36,6 @@ public partial class MainWindow: Gtk.Window
 				foreach (var classPair in classList) {
 					CoverageModel.CoverageClass klass = classPair.Value;
 					coverageAsTreeModel.AppendValues (iter, klass.Name, null, klass.Name, null);
-
-					/*
-					var classMethods = model.Methods.Where (m => m.ClassName == method.ClassName);
-					foreach (CoverageModel.CoverageMethod classMethod in classMethods) {
-						coverageAsTreeModel.AppendValues (classIter, classMethod.MethodName, null, null, classMethod.MethodName);
-					}
-					*/
 				}
 			}
 
@@ -50,22 +43,32 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 
+    MenuItem fileMenuItem;
+    MenuItem openMenuItem;
+    MenuItem quitMenuItem;
+    MenuItem helpMenuItem;
+    MenuItem aboutMenuItem;
+
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
 
 		Title = "CoverageBuddy";
 
+        SetupMenu ();
 		SetupTreeView ();
 
 		SetupMacIntegration ();
-
 	}
 
 	void SetupMacIntegration ()
 	{
 		IgeMacMenu.GlobalKeyHandlerEnabled = true;
 		IgeMacMenu.MenuBar = mainMenuBar;
+        IgeMacMenu.QuitMenuItem = quitMenuItem;
+
+        var appGroup = IgeMacMenu.AddAppMenuGroup ();
+        appGroup.AddMenuItem (aboutMenuItem, "About Coverage Buddy");
 
 		mainMenuBar.Hide ();
 	}
@@ -160,21 +163,64 @@ public partial class MainWindow: Gtk.Window
 		};
 	}
 
-	protected void OnOpen (object sender, EventArgs e)
-	{
-		FileChooserDialog dialog = new FileChooserDialog ("Select coverage file", this, FileChooserAction.Open, 
-			"Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
+    // Build the menus by hand, rather than using actions.
+    void SetupMenu ()
+    {
+        AccelGroup accels = new AccelGroup ();
+        AddAccelGroup (accels);
 
-		if (dialog.Run () == (int) ResponseType.Accept) {
-			CoverageModel model = new CoverageModel (dialog.Filename);
-			Model = model;
-		}
+        fileMenuItem = new MenuItem ("File");
+        Menu fileMenu = new Menu ();
 
-		dialog.Destroy ();
-	}
+        fileMenuItem.Submenu = fileMenu;
 
-	protected void OnQuit (object sender, EventArgs e)
-	{
-		Application.Quit ();
-	}
+        openMenuItem = new MenuItem ("Open…");
+        openMenuItem.AddAccelerator ("activate", accels, new AccelKey (Gdk.Key.O, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
+        openMenuItem.Activated += OnOpen;
+
+        quitMenuItem = new MenuItem ("Quit");
+        quitMenuItem.AddAccelerator ("activate", accels, new AccelKey (Gdk.Key.Q, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
+        quitMenuItem.Activated += OnQuit;
+
+        fileMenu.Append (openMenuItem);
+        fileMenu.Append (quitMenuItem);
+
+        mainMenuBar.Append (fileMenuItem);
+        fileMenuItem.ShowAll ();
+
+        helpMenuItem = new MenuItem ("Help");
+        Menu helpMenu = new Menu ();
+
+        helpMenuItem.Submenu = helpMenu;
+
+        aboutMenuItem = new MenuItem ("About Coverage Buddy");
+        aboutMenuItem.Activated += OnAbout;
+        helpMenu.Append (aboutMenuItem);
+
+        mainMenuBar.Append (helpMenuItem);
+        helpMenuItem.ShowAll ();
+    }
+
+    protected void OnOpen (object sender, EventArgs e)
+    {
+        FileChooserDialog dialog = new FileChooserDialog ("Select coverage file", this, FileChooserAction.Open, 
+            "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
+
+        if (dialog.Run () == (int) ResponseType.Accept) {
+            CoverageModel model = new CoverageModel (dialog.Filename);
+            Model = model;
+        }
+
+        dialog.Destroy ();
+    }
+
+    protected void OnQuit (object sender, EventArgs e)
+    {
+        Application.Quit ();
+    }
+
+    protected void OnAbout (object sender, EventArgs e)
+    {
+        
+    }
 }

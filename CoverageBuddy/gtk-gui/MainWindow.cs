@@ -13,7 +13,7 @@ public partial class MainWindow
 	
 	private global::Gtk.Action asdasdAction;
 	
-	private global::Gtk.Action OpenAction;
+	private global::Gtk.Action OpenCoverageFileAction;
 	
 	private global::Gtk.VBox vbox1;
 	
@@ -51,9 +51,9 @@ public partial class MainWindow
 		this.asdasdAction = new global::Gtk.Action ("asdasdAction", global::Mono.Unix.Catalog.GetString ("asdasd"), null, null);
 		this.asdasdAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("asdasd");
 		w1.Add (this.asdasdAction, null);
-		this.OpenAction = new global::Gtk.Action ("OpenAction", global::Mono.Unix.Catalog.GetString ("_Open…"), null, null);
-		this.OpenAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Open File…");
-		w1.Add (this.OpenAction, "<Primary><Mod2>o");
+		this.OpenCoverageFileAction = new global::Gtk.Action ("OpenCoverageFileAction", global::Mono.Unix.Catalog.GetString ("_Open Coverage File…"), null, null);
+		this.OpenCoverageFileAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Open File…");
+		w1.Add (this.OpenCoverageFileAction, "<Primary><Mod2>o");
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -65,7 +65,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='mainMenuBar'><menu name='FileAction' action='FileAction'><menuitem name='OpenAction' action='OpenAction'/><menuitem name='QuitAction' action='QuitAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='mainMenuBar'/></ui>");
 		this.mainMenuBar = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/mainMenuBar")));
 		this.mainMenuBar.Name = "mainMenuBar";
 		this.vbox1.Add (this.mainMenuBar);
@@ -131,6 +131,6 @@ public partial class MainWindow
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.QuitAction.Activated += new global::System.EventHandler (this.OnQuit);
-		this.OpenAction.Activated += new global::System.EventHandler (this.OnOpen);
+		this.OpenCoverageFileAction.Activated += new global::System.EventHandler (this.OnOpen);
 	}
 }

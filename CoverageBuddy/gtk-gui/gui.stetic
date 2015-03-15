@@ -53,12 +53,7 @@
         <child>
           <widget class="Gtk.MenuBar" id="mainMenuBar">
             <property name="MemberName" />
-            <node name="mainMenuBar" type="Menubar">
-              <node type="Menu" action="FileAction">
-                <node type="Menuitem" action="OpenCoverageFileAction" />
-                <node type="Menuitem" action="QuitAction" />
-              </node>
-            </node>
+            <node name="mainMenuBar" type="Menubar" />
           </widget>
           <packing>
             <property name="Position">0</property>
