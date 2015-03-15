@@ -132,7 +132,7 @@ public partial class MainWindow: Gtk.Window
 				var pair = klass.ClassFiles.FirstOrDefault();
 				CoverageModel.CoverageFile file = pair.Value;
 				string filename = file.Filename;
-				if (filename == null) {
+				if (string.IsNullOrEmpty (filename)) {
 					return;
 				}
 
