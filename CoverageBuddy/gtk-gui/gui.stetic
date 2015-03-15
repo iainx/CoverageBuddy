@@ -33,10 +33,10 @@
         <property name="Label" translatable="yes">asdasd</property>
         <property name="ShortLabel" translatable="yes">asdasd</property>
       </action>
-      <action id="OpenAction">
+      <action id="OpenCoverageFileAction">
         <property name="Type">Action</property>
         <property name="Accelerator">&lt;Primary&gt;&lt;Mod2&gt;o</property>
-        <property name="Label" translatable="yes">_Open…</property>
+        <property name="Label" translatable="yes">_Open Coverage File…</property>
         <property name="ShortLabel" translatable="yes">Open File…</property>
         <signal name="Activated" handler="OnOpen" />
       </action>
@@ -55,7 +55,7 @@
             <property name="MemberName" />
             <node name="mainMenuBar" type="Menubar">
               <node type="Menu" action="FileAction">
-                <node type="Menuitem" action="OpenAction" />
+                <node type="Menuitem" action="OpenCoverageFileAction" />
                 <node type="Menuitem" action="QuitAction" />
               </node>
             </node>
