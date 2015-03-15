@@ -1,0 +1,8 @@
+{
+	CFBundleVersion = "0.1";
+	CFBundleDisplayName = "Coverage Buddy";
+	CFBundleName = "Coverage Buddy";
+	"CFBundleInfoDictionaryVersion" = "6.0";
+	CFBundleExecutable = CoverageBuddy;
+	CFBundleIdentifier = "com.falsevictories.CoverageBuddy";
+}

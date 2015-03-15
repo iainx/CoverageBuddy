@@ -56,4 +56,10 @@
     <Compile Include="IgeMacIntegration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="MacBuild\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MacBuild\Info.plist" />
+  </ItemGroup>
 </Project>
