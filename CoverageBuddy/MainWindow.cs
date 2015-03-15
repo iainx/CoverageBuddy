@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Gtk;
@@ -26,10 +27,15 @@ public partial class MainWindow: Gtk.Window
 				if (model.Methods == null) {
 					continue;
 				}
-					
-				foreach (var classPair in assembly.Classes) {
+
+				List<KeyValuePair<string, CoverageModel.CoverageClass>> classList = assembly.Classes.ToList ();
+				classList.Sort ((firstPair, secondPair) => {
+					return firstPair.Value.Name.CompareTo (secondPair.Value.Name);
+				});
+
+				foreach (var classPair in classList) {
 					CoverageModel.CoverageClass klass = classPair.Value;
-					TreeIter classIter = coverageAsTreeModel.AppendValues (iter, klass.Name, null, klass.Name, null);
+					coverageAsTreeModel.AppendValues (iter, klass.Name, null, klass.Name, null);
 
 					/*
 					var classMethods = model.Methods.Where (m => m.ClassName == method.ClassName);
@@ -139,13 +145,12 @@ public partial class MainWindow: Gtk.Window
 					CoverageType type = CoverageType.NotProfiled;
 
 					// Statement line numbers start at 1
-					if (file.Statements.ContainsKey(i + 1)) {
-						CoverageModel.CoverageStatement statement = file.Statements[i + 1];
-
-						if (statement.Counter == 0) {
-							type = CoverageType.NotCovered;
-						} else {
+					bool covered;
+					if (file.LinesHit.TryGetValue (i + 1, out covered)) {
+						if (covered) {
 							type = CoverageType.Covered;
+						} else {
+							type = CoverageType.NotCovered;
 						}
 					}
 

@@ -21,7 +21,7 @@ namespace CoverageBuddy
 
 		public class CoverageFile {
 			public string Filename;
-			public Dictionary<int, CoverageStatement> Statements;
+			public Dictionary<int, bool> LinesHit;
 		};
 
 		public class CoverageClass {
@@ -86,7 +86,7 @@ namespace CoverageBuddy
 				};
 
 				CoverageClass klass;
-				if (!Classes.ContainsKey (method.ClassName)) {
+				if (!Classes.TryGetValue (method.ClassName, out klass)) {
 					klass = new CoverageClass {
 						Assembly = assembly,
 						Name = method.ClassName,
@@ -95,8 +95,6 @@ namespace CoverageBuddy
 					};
 
 					Classes [method.ClassName] = klass;
-				} else {
-					klass = Classes [method.ClassName];
 				}
 				assembly.Classes [method.ClassName] = klass;
 
@@ -116,17 +114,24 @@ namespace CoverageBuddy
 
 					CoverageFile file;
 
-					if (klass.ClassFiles.ContainsKey (statement.Filename)) {
-						file = klass.ClassFiles [statement.Filename];
-					} else {
+					if (!klass.ClassFiles.TryGetValue (statement.Filename, out file)) {
 						file = new CoverageFile {
 							Filename = statement.Filename,
-							Statements = new Dictionary<int, CoverageStatement> ()
+							LinesHit = new Dictionary<int, bool> ()
 						};
 						klass.ClassFiles [statement.Filename] = file;
 					}
 
-					file.Statements[statement.Line] = statement;
+					bool covered;
+					if (file.LinesHit.TryGetValue (statement.Line, out covered)) {
+						// If a line has been covered, we don't want to undo it
+						// if we come across the same line that hasn't been hit.
+						if (covered == false) {
+							file.LinesHit [statement.Line] = (statement.Counter == 1);
+						}
+					} else {
+						file.LinesHit [statement.Line] = (statement.Counter == 1);
+					}
 				}
 
 				Methods.Add (method);
