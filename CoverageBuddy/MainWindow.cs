@@ -221,6 +221,12 @@ public partial class MainWindow: Gtk.Window
 
     protected void OnAbout (object sender, EventArgs e)
     {
-        
+        AboutDialog dialog = new AboutDialog ();
+
+        dialog.Authors = new string[] { "Iain Holmes" };
+        dialog.Version = "0.1";
+        dialog.Comments = "For all your coverage needs";
+        dialog.Run ();
+        dialog.Destroy ();
     }
 }
