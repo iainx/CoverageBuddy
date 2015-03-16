@@ -41,6 +41,7 @@ namespace CoverageBuddy
 
 		public class CoverageMethod {
 			public CoverageAssembly Assembly;
+            public CoverageClass ParentClass;
 			public string ClassName;
 			public string MethodName;
 			public Dictionary<int, CoverageStatement> Statements;
@@ -99,6 +100,7 @@ namespace CoverageBuddy
 				assembly.Classes [method.ClassName] = klass;
 
 				klass.ClassMethods.Add (method);
+                method.ParentClass = klass;
 
 				var s = from statement in m.Descendants ("statement")
 					select new CoverageStatement {
