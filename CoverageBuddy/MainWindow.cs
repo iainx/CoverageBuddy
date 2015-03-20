@@ -115,9 +115,6 @@ public partial class MainWindow: Gtk.Window
 		greenTag.Foreground = "green";
 		buffer.TagTable.Add (greenTag);
 
-		TreeViewColumn assemblyColumn = new TreeViewColumn ();
-		assemblyColumn.Title = "Assemblies";
-
 		coverageTreeView.AppendColumn ("Assemblies", new CellRendererText (), "text", 0);
 
 		TreeSelection selection = coverageTreeView.Selection;
@@ -225,7 +222,7 @@ public partial class MainWindow: Gtk.Window
 
         dialog.Authors = new string[] { "Iain Holmes" };
         dialog.Version = "0.1";
-        dialog.Comments = "For all your coverage needs";
+        dialog.Comments = "For all your coverage needs";    
         dialog.Run ();
         dialog.Destroy ();
     }
