@@ -27,6 +27,10 @@ namespace CoverageBuddy
 		public class CoverageClass {
 			public CoverageAssembly Assembly;
 			public string Name;
+            public int NumberOfMethods;
+            public int FullyCovered;
+            public int PartiallyCovered;
+
 			public List<CoverageMethod> ClassMethods;
 			public Dictionary<string, CoverageFile> ClassFiles;
 		};
@@ -34,7 +38,6 @@ namespace CoverageBuddy
 		public class CoverageStatement {
 			public int Offset;
 			public int Counter;
-			public string Filename;
 			public int Line;
 			public int Column;
 		};
@@ -44,6 +47,7 @@ namespace CoverageBuddy
             public CoverageClass ParentClass;
 			public string ClassName;
 			public string MethodName;
+            public string Filename;
 			public Dictionary<int, CoverageStatement> Statements;
 		};
 
@@ -57,21 +61,37 @@ namespace CoverageBuddy
 
 			Classes = new Dictionary<string, CoverageClass> ();
 
-			var a = from assembly in document.Descendants ("assembly")
-			        select new CoverageAssembly {
-				Name = (string)assembly.Attribute ("name"),
-				Guid = (string)assembly.Attribute ("guid"),
-				Filename = (string)assembly.Attribute ("filename"),
-				NumberOfMethods = (int)assembly.Attribute ("method-count"),
-				FullyCovered = (int)assembly.Attribute ("full"),
-				PartiallyCovered = (int)assembly.Attribute ("partial"),
-				Classes = new Dictionary<string, CoverageClass> ()
-			};
+            Assemblies = new Dictionary<string, CoverageAssembly> ();
+            var assemblies = document.Descendants ("assembly");
+            foreach (var a in assemblies) {
+                CoverageAssembly assembly = new CoverageAssembly {
+                    Name = (string)a.Attribute ("name"),
+                    Guid = (string)a.Attribute ("guid"),
+                    Filename = (string)a.Attribute ("filename"),
+                    NumberOfMethods = (int)a.Attribute ("method-count"),
+                    FullyCovered = (int)a.Attribute ("full"),
+                    PartiallyCovered = (int)a.Attribute ("partial"),
+                    Classes = new Dictionary<string, CoverageClass> ()
+                };
 
-			Assemblies = new Dictionary<string, CoverageAssembly> ();
-			foreach (var assembly in a) {
-				Assemblies[assembly.Name] = assembly;
-			}
+                Assemblies [assembly.Name] = assembly;
+
+                var classes = a.Descendants ("class");
+                foreach (var c in classes) {
+                    CoverageClass klass = new CoverageClass {
+                        Assembly = assembly,
+                        Name = (string)c.Attribute ("name"),
+                        NumberOfMethods = (int)c.Attribute ("method-count"),
+                        FullyCovered = (int)c.Attribute ("full"),
+                        PartiallyCovered = (int)c.Attribute ("partial"),
+                        ClassMethods = new List<CoverageMethod> (),
+                        ClassFiles = new Dictionary<string, CoverageFile> ()
+                    };
+
+                    assembly.Classes[klass.Name] = klass;
+                    Classes [klass.Name] = klass;
+                }
+            }
 
 			Methods = new List<CoverageMethod> ();
 
@@ -83,30 +103,32 @@ namespace CoverageBuddy
 					Assembly = assembly,
 					ClassName = (string)m.Attribute ("class"),
 					MethodName = (string)m.Attribute ("name"),
+                    Filename = (string)m.Attribute ("filename"),
 					Statements = new Dictionary<int, CoverageStatement> ()
 				};
-
+                    
 				CoverageClass klass;
+                CoverageFile file = null;
+
 				if (!Classes.TryGetValue (method.ClassName, out klass)) {
-					klass = new CoverageClass {
-						Assembly = assembly,
-						Name = method.ClassName,
-						ClassMethods = new List<CoverageMethod> (),
-						ClassFiles = new Dictionary<string, CoverageFile> ()
-					};
+                    Console.WriteLine ("Unknown class: " + method.ClassName);
+                } else {
+                    klass.ClassMethods.Add (method);
+                    method.ParentClass = klass;
 
-					Classes [method.ClassName] = klass;
-				}
-				assembly.Classes [method.ClassName] = klass;
-
-				klass.ClassMethods.Add (method);
-                method.ParentClass = klass;
+                    if (!klass.ClassFiles.TryGetValue (method.Filename, out file)) {
+                        file = new CoverageFile {
+                            Filename = method.Filename,
+                            LinesHit = new Dictionary<int, bool> ()
+                        };
+                        klass.ClassFiles [method.Filename] = file;
+                    }
+                }
 
 				var s = from statement in m.Descendants ("statement")
 					select new CoverageStatement {
 						Offset = (int)statement.Attribute("offset"),
 						Counter = (int)statement.Attribute("counter"),
-						Filename = (string)statement.Attribute("filename"),
 						Line = (int)statement.Attribute("line"),
 						Column = (int)statement.Attribute("column")
 				};
@@ -114,15 +136,9 @@ namespace CoverageBuddy
 				foreach (var statement in s) {
 					method.Statements [statement.Line] = statement;
 
-					CoverageFile file;
-
-					if (!klass.ClassFiles.TryGetValue (statement.Filename, out file)) {
-						file = new CoverageFile {
-							Filename = statement.Filename,
-							LinesHit = new Dictionary<int, bool> ()
-						};
-						klass.ClassFiles [statement.Filename] = file;
-					}
+                    if (file == null) {
+                        continue;
+                    }
 
 					bool covered;
 					if (file.LinesHit.TryGetValue (statement.Line, out covered)) {

@@ -17,12 +17,12 @@ public partial class MainWindow: Gtk.Window
 		set { 
 			model = value;
 
-			coverageAsTreeModel = new TreeStore (typeof (string), typeof (string), typeof (string), typeof (string));
+            coverageAsTreeModel = new TreeStore (typeof (string), typeof (string), typeof (string), typeof (string), typeof (int));
 			foreach (var assemblyPair in model.Assemblies) {
 				CoverageModel.CoverageAssembly assembly = assemblyPair.Value;
 
 				int percentage = ((assembly.FullyCovered + assembly.PartiallyCovered) * 100) / assembly.NumberOfMethods;
-				TreeIter iter = coverageAsTreeModel.AppendValues (String.Format ("{0} {1}% covered", assembly.Name, percentage), assembly, null, null);
+                TreeIter iter = coverageAsTreeModel.AppendValues (assembly.Name, assembly, null, null, percentage);
 
 				if (model.Methods == null) {
 					continue;
@@ -35,7 +35,13 @@ public partial class MainWindow: Gtk.Window
 
 				foreach (var classPair in classList) {
 					CoverageModel.CoverageClass klass = classPair.Value;
-					coverageAsTreeModel.AppendValues (iter, klass.Name, null, klass.Name, null);
+
+                    if (klass.NumberOfMethods > 0) {
+                        percentage = ((klass.FullyCovered + klass.PartiallyCovered) * 100) / klass.NumberOfMethods;
+                    } else {
+                        percentage = 0;
+                    }
+                    coverageAsTreeModel.AppendValues (iter, klass.Name, null, klass.Name, null, percentage);
 				}
 			}
 
@@ -116,7 +122,7 @@ public partial class MainWindow: Gtk.Window
 		buffer.TagTable.Add (greenTag);
 
 		coverageTreeView.AppendColumn ("Assemblies", new CellRendererText (), "text", 0);
-
+        coverageTreeView.AppendColumn ("Percentage", new CellRendererProgress (), "value", 4);
 		TreeSelection selection = coverageTreeView.Selection;
 		selection.Changed += (o, e) => {
 			TreeIter iter;
