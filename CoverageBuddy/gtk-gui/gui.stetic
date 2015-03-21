@@ -8,7 +8,7 @@
     <widget-library name="../bin/Debug/CoverageBuddy.exe" internal="true" />
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="501 364">
+  <widget class="Gtk.Window" id="MainWindow" design-size="1513 832">
     <action-group name="Default">
       <action id="FileAction">
         <property name="Type">Action</property>
@@ -66,7 +66,7 @@
           <widget class="Gtk.HPaned" id="hpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">174</property>
+            <property name="Position">500</property>
             <child>
               <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
                 <property name="MemberName" />
@@ -75,6 +75,7 @@
                 <child>
                   <widget class="Gtk.TreeView" id="coverageTreeView">
                     <property name="MemberName" />
+                    <property name="WidthRequest">450</property>
                     <property name="CanFocus">True</property>
                   </widget>
                 </child>
@@ -106,6 +107,8 @@
                     <child>
                       <widget class="Gtk.TextView" id="fileTextView">
                         <property name="MemberName" />
+                        <property name="WidthRequest">1024</property>
+                        <property name="HeightRequest">764</property>
                         <property name="CanFocus">True</property>
                         <property name="ShowScrollbars">True</property>
                         <property name="Editable">False</property>

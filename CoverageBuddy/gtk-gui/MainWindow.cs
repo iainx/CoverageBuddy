@@ -77,7 +77,7 @@ public partial class MainWindow
 		this.hpaned1 = new global::Gtk.HPaned ();
 		this.hpaned1.CanFocus = true;
 		this.hpaned1.Name = "hpaned1";
-		this.hpaned1.Position = 174;
+		this.hpaned1.Position = 500;
 		// Container child hpaned1.Gtk.Paned+PanedChild
 		this.scrolledwindow1 = new global::Gtk.ScrolledWindow ();
 		this.scrolledwindow1.CanFocus = true;
@@ -85,6 +85,7 @@ public partial class MainWindow
 		this.scrolledwindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child scrolledwindow1.Gtk.Container+ContainerChild
 		this.coverageTreeView = new global::Gtk.TreeView ();
+		this.coverageTreeView.WidthRequest = 450;
 		this.coverageTreeView.CanFocus = true;
 		this.coverageTreeView.Name = "coverageTreeView";
 		this.scrolledwindow1.Add (this.coverageTreeView);
@@ -110,6 +111,8 @@ public partial class MainWindow
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.fileTextView = new global::Gtk.TextView ();
+		this.fileTextView.WidthRequest = 1024;
+		this.fileTextView.HeightRequest = 764;
 		this.fileTextView.CanFocus = true;
 		this.fileTextView.Name = "fileTextView";
 		this.fileTextView.Editable = false;
@@ -126,8 +129,8 @@ public partial class MainWindow
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 501;
-		this.DefaultHeight = 364;
+		this.DefaultWidth = 1513;
+		this.DefaultHeight = 832;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.QuitAction.Activated += new global::System.EventHandler (this.OnQuit);
