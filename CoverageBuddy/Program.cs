@@ -9,7 +9,6 @@ namespace CoverageBuddy
 		{
 			Application.Init ();
 
-			//CoverageModel model = new CoverageModel ("/Users/iain/Projects/xamarin/hello/test.xml");
 			MainWindow win = new MainWindow ();
 
 			win.Show ();
