@@ -21,9 +21,17 @@ public partial class MainWindow
 	
 	private global::Gtk.HPaned hpaned1;
 	
+	private global::Gtk.VBox vbox3;
+	
 	private global::Gtk.ScrolledWindow scrolledwindow1;
 	
 	private global::Gtk.TreeView coverageTreeView;
+	
+	private global::Gtk.HBox hbox1;
+	
+	private global::Gtk.Label SearchLabel;
+	
+	private global::Gtk.Entry searchEntry;
 	
 	private global::Gtk.VBox vbox2;
 	
@@ -79,6 +87,10 @@ public partial class MainWindow
 		this.hpaned1.Name = "hpaned1";
 		this.hpaned1.Position = 500;
 		// Container child hpaned1.Gtk.Paned+PanedChild
+		this.vbox3 = new global::Gtk.VBox ();
+		this.vbox3.Name = "vbox3";
+		this.vbox3.Spacing = 6;
+		// Container child vbox3.Gtk.Box+BoxChild
 		this.scrolledwindow1 = new global::Gtk.ScrolledWindow ();
 		this.scrolledwindow1.CanFocus = true;
 		this.scrolledwindow1.Name = "scrolledwindow1";
@@ -89,9 +101,39 @@ public partial class MainWindow
 		this.coverageTreeView.CanFocus = true;
 		this.coverageTreeView.Name = "coverageTreeView";
 		this.scrolledwindow1.Add (this.coverageTreeView);
-		this.hpaned1.Add (this.scrolledwindow1);
-		global::Gtk.Paned.PanedChild w4 = ((global::Gtk.Paned.PanedChild)(this.hpaned1 [this.scrolledwindow1]));
-		w4.Resize = false;
+		this.vbox3.Add (this.scrolledwindow1);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.scrolledwindow1]));
+		w4.Position = 0;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.hbox1 = new global::Gtk.HBox ();
+		this.hbox1.Name = "hbox1";
+		this.hbox1.Spacing = 6;
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.SearchLabel = new global::Gtk.Label ();
+		this.SearchLabel.Name = "SearchLabel";
+		this.SearchLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Search");
+		this.hbox1.Add (this.SearchLabel);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.SearchLabel]));
+		w5.Position = 0;
+		w5.Expand = false;
+		w5.Fill = false;
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.searchEntry = new global::Gtk.Entry ();
+		this.searchEntry.CanFocus = true;
+		this.searchEntry.Name = "searchEntry";
+		this.searchEntry.IsEditable = true;
+		this.searchEntry.InvisibleChar = '●';
+		this.hbox1.Add (this.searchEntry);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.searchEntry]));
+		w6.Position = 1;
+		this.vbox3.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hbox1]));
+		w7.Position = 1;
+		w7.Expand = false;
+		w7.Fill = false;
+		this.hpaned1.Add (this.vbox3);
+		global::Gtk.Paned.PanedChild w8 = ((global::Gtk.Paned.PanedChild)(this.hpaned1 [this.vbox3]));
+		w8.Resize = false;
 		// Container child hpaned1.Gtk.Paned+PanedChild
 		this.vbox2 = new global::Gtk.VBox ();
 		this.vbox2.Name = "vbox2";
@@ -101,10 +143,10 @@ public partial class MainWindow
 		this.titleLabel.Name = "titleLabel";
 		this.titleLabel.Xalign = 0F;
 		this.vbox2.Add (this.titleLabel);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.titleLabel]));
-		w5.Position = 0;
-		w5.Expand = false;
-		w5.Fill = false;
+		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.titleLabel]));
+		w9.Position = 0;
+		w9.Expand = false;
+		w9.Fill = false;
 		// Container child vbox2.Gtk.Box+BoxChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -119,12 +161,12 @@ public partial class MainWindow
 		this.fileTextView.CursorVisible = false;
 		this.GtkScrolledWindow.Add (this.fileTextView);
 		this.vbox2.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
-		w7.Position = 1;
+		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
+		w11.Position = 1;
 		this.hpaned1.Add (this.vbox2);
 		this.vbox1.Add (this.hpaned1);
-		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hpaned1]));
-		w9.Position = 1;
+		global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hpaned1]));
+		w13.Position = 1;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -135,5 +177,6 @@ public partial class MainWindow
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.QuitAction.Activated += new global::System.EventHandler (this.OnQuit);
 		this.OpenCoverageFileAction.Activated += new global::System.EventHandler (this.OnOpen);
+		this.searchEntry.Changed += new global::System.EventHandler (this.OnSearchChanged);
 	}
 }

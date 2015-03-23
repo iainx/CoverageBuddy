@@ -11,6 +11,8 @@ using IgeMacIntegration;
 public partial class MainWindow: Gtk.Window
 {
 	private TreeStore coverageAsTreeModel;
+    private TreeModelFilter filterModel;
+
 	private CoverageModel model;
 	public CoverageModel Model { 
 		get { return model; }
@@ -45,7 +47,9 @@ public partial class MainWindow: Gtk.Window
 				}
 			}
 
-			coverageTreeView.Model = coverageAsTreeModel;
+            filterModel = new TreeModelFilter (coverageAsTreeModel, null);
+            filterModel.VisibleFunc = FilterFunc;
+            coverageTreeView.Model = filterModel;
 		}
 	}
 
@@ -231,5 +235,31 @@ public partial class MainWindow: Gtk.Window
         dialog.Comments = "For all your coverage needs";    
         dialog.Run ();
         dialog.Destroy ();
+    }
+
+    private string filterString;
+
+    bool FilterFunc (TreeModel model, TreeIter iter)
+    {
+        if (filterString == null) {
+            return true;
+        }
+
+        string name = model.GetValue (iter, 0) as string;
+        if (name == null) {
+            return true;
+        }
+
+        if (model.IterHasChild (iter)) {
+            return true;
+        }
+
+        return (name.IndexOf (filterString) > -1);
+    }
+
+    protected void OnSearchChanged (object sender, EventArgs e)
+    {
+        filterString = searchEntry.Text;
+        filterModel.Refilter ();
     }
 }
